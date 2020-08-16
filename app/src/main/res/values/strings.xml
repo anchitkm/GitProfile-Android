@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">GitProfile</string>
+    <string name="search">Search</string>
+    <string name="search_bar">Search Bar</string>
+</resources>
