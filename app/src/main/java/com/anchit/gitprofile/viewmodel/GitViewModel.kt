@@ -6,27 +6,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.anchit.gitprofile.model.UserInfo
 import com.anchit.gitprofile.model.UserProfile
-import com.anchit.gitprofile.model.UserRepos
 import com.anchit.gitprofile.repo.GitProfileRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 
-open class GitViewModel : ViewModel() {
+class GitViewModel : ViewModel() {
 
     companion object {
         private val TAG = GitViewModel::class.java.simpleName
     }
 
-    public var userProfile = MutableLiveData<UserProfile>()
-    var userRepo = MutableLiveData<UserRepos>()
-    var progressBar = MutableLiveData<Boolean>()
-    var combinedResult = MediatorLiveData<UserInfo>()
-
-
-//    val results=userProfile.combineWith(userRepo){
-//        userProfile, userRepos ->
-//
-//        val userInfo=UserInfo(userProfile!!,userRepos!!)
-//        combinedResult.postValue(userInfo)
-//    }
+    var userProfile = MutableLiveData<UserProfile>()
+    var userInfoLiveData = MutableLiveData<UserInfo>()
 
 
     private fun <T, K, R> LiveData<T>.combineWith(
@@ -42,30 +34,20 @@ open class GitViewModel : ViewModel() {
         }
         return result
     }
-    fun getUserProfile(userName:String) {
 
-        progressBar.postValue(true)
-        GitProfileRepository.userProfile.observeForever {
-            progressBar.postValue(false)
-            userProfile.postValue(it)
+    suspend fun fetchUserInfo(userName: String)= withContext(Dispatchers.IO){
 
-        }
-        GitProfileRepository.getUserProfile(userName)
-    }
+        val userProfile=
+            async {
+                return@async GitProfileRepository.getUserProfile(userName)
+            }
+        val userRepos=
+            async {
+                return@async GitProfileRepository.getUserRepos(userName)
+            }
 
-    fun getUserRepo(userName:String){
-
-//        progressBar.postValue(true)
-        GitProfileRepository.userRepos.observeForever {
-//            progressBar.postValue(false)
-            userRepo.postValue(it)
-        }
-        GitProfileRepository.getUserRepos(userName)
-    }
-    override fun onCleared() {
-        super.onCleared()
-        GitProfileRepository.userProfile.removeObserver { it }
-        GitProfileRepository.userRepos.removeObserver{ it }
+        val userInfo= UserInfo(userProfile.await(), (userRepos.await()!!))
+        userInfoLiveData.postValue(userInfo)
     }
 
 }

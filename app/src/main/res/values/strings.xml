@@ -1,5 +1,16 @@
 <resources>
     <string name="app_name">GitProfile</string>
-    <string name="search">Search</string>
-    <string name="search_bar">Search Bar</string>
+    <string name="search">Enter User Name</string>
+    <string name="loading">Loading</string>
+    <string name="language">Language: %s</string>
+    <string name="unknown">\?</string>
+    <string name="star">star</string>
+    <string name="fork_repo">fork repo</string>
+    <string name="public_repositories"> %s Public Repositories</string>
+    <string name="invalid_input">Invalid Input</string>
+    <string name="company">Company</string>
+    <string name="user_name">user name</string>
+    <string name="no_repo_found">No Repo Found</string>
+    <string name="location">Location</string>
+    <string name="profile">Profile</string>
 </resources>

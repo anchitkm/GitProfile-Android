@@ -5,5 +5,9 @@
     <dimen name="dp_4">4dp</dimen>
     <dimen name="dp_8">8dp</dimen>
     <dimen name="dp_100">100dp</dimen>
-    <dimen name="dp_32">32dp</dimen>
+    <dimen name="row_item_margin_vertical">12dp</dimen>
+    <dimen name="row_item_margin_horizontal">12dp</dimen>
+    <dimen name="repo_name_size">16sp</dimen>
+    <dimen name="repo_description_size">16sp</dimen>
+    <dimen name="sp_24">24sp</dimen>
 </resources>
