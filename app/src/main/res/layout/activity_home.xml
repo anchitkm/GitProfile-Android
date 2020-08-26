@@ -131,7 +131,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="@android:color/white"
+                android:layout_margin="@dimen/dp_8"
+                android:background="#A9A9A9"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_repo_count">
 
