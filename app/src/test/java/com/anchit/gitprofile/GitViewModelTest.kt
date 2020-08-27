@@ -10,6 +10,8 @@ import com.anchit.gitprofile.repo.GitProfileRepository
 import com.anchit.gitprofile.utils.TestCoroutineRule
 import com.anchit.gitprofile.viewmodel.GitViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -19,6 +21,8 @@ import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
+import retrofit2.Response
+import java.io.IOException
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -66,6 +70,7 @@ class GitViewModelTest {
             doReturn(UserRepos())
                 .`when`(apiService)
                 .getUserRepo(username)
+
 //            val viewModel = GitViewModel()
 //            viewModel.userRepos.observeForever(apiUserRepoObserver)
             verify(apiService).getUserRepo(username).isSuccessful
@@ -82,6 +87,32 @@ class GitViewModelTest {
             viewModel.userProfile.observeForever(apiUsersProfileObserver)
             verify(apiService, times(2)).getUserProfile(username)
             viewModel.userProfile.removeObserver(apiUsersProfileObserver)
+        }
+    }
+
+    @Test
+    fun fetchNull() {
+        try {
+            testCoroutineRule.runBlockingTest {
+                val response: Response<*> = apiService.getUserProfile("anchitkm")
+                Assert.assertEquals(response?.code(), null)
+
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+    @Test
+    fun fetchSuccess() {
+        try {
+            testCoroutineRule.runBlockingTest {
+                val response: Response<*> = apiService.getUserProfile("anchitkm")
+                delay(10000)
+                Assert.assertEquals(response?.code(), 200)
+
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
     }
 

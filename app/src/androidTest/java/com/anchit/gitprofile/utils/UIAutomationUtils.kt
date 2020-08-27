@@ -135,55 +135,6 @@ object UIAutomationUtils {
         return isTextEntered
     }
 
-    /**
-     * This method will search on UI for View matching given resourceId. Once the resource is found
-     * it will perform click action on the view.
-     *
-     * @param resourceId Resource id as defined by R.id.resourceId for the element to be searched on
-     * UI
-     * @return true if matching view is found , false otherwise
-     */
-    fun performClick(resourceId: Int): Boolean {
-        val isViewFound: Boolean = waitForExistCompleteDisplayed(
-            resourceId,
-            DummyTestConstants.WAIT_TIME_SEARCH_VIEW
-        )
-        if (isViewFound) {
-            try {
-                Espresso.onView(withId(resourceId))
-                    .check(matches(withId(resourceId)))
-                    .perform(ViewActions.click())
-            } catch (e: Exception) {
-                Log.e(TAG, ""+e.localizedMessage)
-            }
-        }
-        return isViewFound
-    }
-
-    fun waitForExistCompleteDisplayed(resourceId: Int, millis: Long): Boolean {
-        var isViewFound = false
-        val endTime = System.currentTimeMillis() + millis
-        while (System.currentTimeMillis() < endTime) {
-            try {
-                Espresso.onView(withId(resourceId)).check(
-                    matches(withId(resourceId))
-                )
-                isViewFound = true
-                break
-            } catch (t: Throwable) {
-                Log.d(TAG, "View not found on screen")
-                try {
-                    Thread.sleep(DummyTestConstants.WAIT_TIME_UI_REFRESH)
-                } catch (e: InterruptedException) {
-                    Log.d(
-                        TAG,
-                        "thread interrupted while waiting for screen refresh" + e.localizedMessage
-                    )
-                }
-            }
-        }
-        return isViewFound
-    }
 
     fun waitForExistTextCompleteDisplayed(text: String?, millis: Long): Boolean {
         var isViewFound = false
